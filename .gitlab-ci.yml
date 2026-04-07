@@ -17,9 +17,10 @@ build_and_push:
   services:
     - name: docker:26-dind
       alias: docker
-  # Make sure to use a runner with the dind tag (that can actually build)
+  # Make sure to use a runner with the dind tag (that can actually build) and ude-sse
   tags:
     - dind
+    - ude-sse
   before_script:
     # Log in to GitLab's Container Registry (built-in env vars)
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
