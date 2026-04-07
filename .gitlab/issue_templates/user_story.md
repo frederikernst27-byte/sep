@@ -16,4 +16,4 @@
 
 - 
 
-/label ~type::userstory
+/label ~type::userstory ~status::backlog
