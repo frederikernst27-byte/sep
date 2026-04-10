@@ -1,19 +1,12 @@
-## What does this MR do?
-
-Short description: 
-
-Closes issue: 
-
-## Changes
-
-- 
-- 
-
-## Covered acceptance criteria (reference)
-
-- 
+## Description
 
 
-## Notes for reviewer
 
-- 
+## What was done?
+
+
+
+## MR Checklist
+- [] Item 1
+- [] Item 2
+- [] Item 3
