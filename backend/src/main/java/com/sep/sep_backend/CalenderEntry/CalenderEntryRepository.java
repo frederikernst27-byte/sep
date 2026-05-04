@@ -1,4 +1,6 @@
 package com.sep.sep_backend.CalenderEntry;
 
-public interface CalenderEntryRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CalenderEntryRepository extends JpaRepository<CalenderEntry,Long> {
 }
