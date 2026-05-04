@@ -1,9 +1,5 @@
-package com.sep.sep_backend.service;
+package com.sep.sep_backend.Trip;
 
-import com.sep.sep_backend.dto.TripCreateDto;
-import com.sep.sep_backend.dto.TripResponseDto;
-import com.sep.sep_backend.model.Trip;
-import com.sep.sep_backend.repository.TripRepository;
 import org.springframework.stereotype.Service;
 
 @Service

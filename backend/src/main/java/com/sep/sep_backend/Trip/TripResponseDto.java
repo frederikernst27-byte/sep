@@ -1,4 +1,4 @@
-package com.sep.sep_backend.dto;
+package com.sep.sep_backend.Trip;
 
 import java.time.LocalDate;
 
