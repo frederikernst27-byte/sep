@@ -1,8 +1,5 @@
-package com.sep.sep_backend.controller;
+package com.sep.sep_backend.Trip;
 
-import com.sep.sep_backend.dto.TripCreateDto;
-import com.sep.sep_backend.dto.TripResponseDto;
-import com.sep.sep_backend.service.TripService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

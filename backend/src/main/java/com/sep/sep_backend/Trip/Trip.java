@@ -1,4 +1,4 @@
-package com.sep.sep_backend.model;
+package com.sep.sep_backend.Trip;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
