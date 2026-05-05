@@ -3,10 +3,10 @@ package com.sep.sep_backend.CalenderEntry;
 import java.time.LocalDateTime;
 
 public class CalenderEntryResponse {
-    public Long id;
-    public String name;
-    public String description;
-    public LocalDateTime dateTime;
+    private Long id;
+    private String name;
+    private String description;
+    private LocalDateTime dateTime;
 
     public String getName() {
         return this.name;

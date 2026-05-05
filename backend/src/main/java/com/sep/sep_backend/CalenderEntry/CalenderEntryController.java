@@ -12,6 +12,12 @@ public class CalenderEntryController {
     public CalenderEntryController(CalenderEntryService service) {
         this.service = service;
     }
+
+    @GetMapping("/{id}")
+    public CalenderEntryResponse getEntryById(@PathVariable Long id) {
+        return service.getEntryById(id);
+    }
+
     @PutMapping("/{id}")
     public CalenderEntryResponse updateEntry(@PathVariable Long id,
                                              @RequestBody CalenderEntryRequest request) {
@@ -21,6 +27,12 @@ public class CalenderEntryController {
     @PostMapping
     public CalenderEntryResponse createEntry(@RequestBody CalenderEntryRequest request) {
         return service.createEntry(request);
+    }
+
+    @PatchMapping("/{id}")
+    public CalenderEntryResponse patchDateTime(@PathVariable Long id,
+                                               @RequestBody CalenderEntryRequest request) {
+        return service.patchDateTime(id, request);
     }
 
     @DeleteMapping("/{id}")
