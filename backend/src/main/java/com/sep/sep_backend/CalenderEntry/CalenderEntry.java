@@ -16,12 +16,17 @@ public class CalenderEntry {
     private String description;
     private LocalDateTime dateTime;
 
+    private Long userId;
+    private Long tripId;
+
     public CalenderEntry(){}
 
-    public CalenderEntry(String name, String description, LocalDateTime dateTime) {
+    public CalenderEntry(String name, String description, LocalDateTime dateTime, Long userId, Long tripId) {
         this.name = name;
         this.description = description;
         this.dateTime = dateTime;
+        this.userId = userId;
+        this.tripId = tripId;
     }
 
     public void setName(String name) {
@@ -47,5 +52,17 @@ public class CalenderEntry {
     }
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public Long getTripId() {
+        return tripId;
+    }
+    public void setTripId(Long tripId) {
+        this.tripId = tripId;
     }
 }
