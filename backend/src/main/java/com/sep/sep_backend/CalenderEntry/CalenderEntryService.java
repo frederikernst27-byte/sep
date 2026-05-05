@@ -34,6 +34,8 @@ public class CalenderEntryService {
         entry.setName(request.getName());
         entry.setDescription(request.getDescription());
         entry.setDateTime(request.getDateTime());
+        entry.setUserId(request.getUserId());
+        entry.setTripId(request.getTripId());
 
         repository.save(entry);
 
@@ -46,6 +48,8 @@ public class CalenderEntryService {
         entry.setName(request.getName());
         entry.setDescription(request.getDescription());
         entry.setDateTime(request.getDateTime());
+        entry.setUserId(request.getUserId());
+        entry.setTripId(request.getTripId());
 
         CalenderEntry saved = repository.save(entry);
 
@@ -67,6 +71,8 @@ public class CalenderEntryService {
         response.setDescription(entry.getDescription());
         response.setName(entry.getName());
         response.setDateTime(entry.getDateTime());
+        response.setUserId(entry.getUserId());
+        response.setTripId(entry.getTripId());
 
         return response;
     }

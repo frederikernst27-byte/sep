@@ -8,6 +8,9 @@ public class CalenderEntryResponse {
     private String description;
     private LocalDateTime dateTime;
 
+    private Long userId;
+    private Long tripId;
+
     public String getName() {
         return this.name;
     }
@@ -31,5 +34,17 @@ public class CalenderEntryResponse {
     }
     public Long getId() {
         return id;
+    }
+    public Long getTripId() {
+        return tripId;
+    }
+    public void setTripId(Long tripId) {
+        this.tripId = tripId;
+    }
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
