@@ -1,7 +1,5 @@
-package com.sep.sep_backend.service;
+package com.sep.sep_backend.User;
 
-import com.sep.sep_backend.model.User; // nutzen User Klasse
-import com.sep.sep_backend.repository.UserRepository; // nutzen Datenbankzugriff
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

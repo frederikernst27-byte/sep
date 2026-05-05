@@ -1,7 +1,5 @@
-package com.sep.sep_backend.controller;
+package com.sep.sep_backend.User;
 
-import com.sep.sep_backend.model.User; // nutzen User Klasse
-import com.sep.sep_backend.service.UserService; // nutzen login/ registrier logik
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
