@@ -3,9 +3,9 @@ package com.sep.sep_backend.CalenderEntry;
 import java.time.LocalDateTime;
 
 public class CalenderEntryRequest {
-    public String name;
-    public String description;
-    public LocalDateTime dateTime;
+    private String name;
+    private String description;
+    private LocalDateTime dateTime;
 
     public String getName() {
         return name;

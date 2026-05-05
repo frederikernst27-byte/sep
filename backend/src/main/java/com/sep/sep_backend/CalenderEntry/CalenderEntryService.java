@@ -3,6 +3,8 @@ package com.sep.sep_backend.CalenderEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class CalenderEntryService {
     private final CalenderEntryRepository repository;
@@ -10,6 +12,20 @@ public class CalenderEntryService {
     @Autowired
     public CalenderEntryService(CalenderEntryRepository repository) {
         this.repository = repository;
+    }
+
+    public CalenderEntryResponse getEntryById(Long id) {
+        CalenderEntry entry = repository.findById(id).orElseThrow(()
+                -> new RuntimeException("Kalendereintrag nicht gefunden"));
+        return toDto(entry);
+    }
+
+    public CalenderEntryResponse patchDateTime(Long id, CalenderEntryRequest request) {
+        CalenderEntry entry = repository.findById(id).orElseThrow(()
+                -> new RuntimeException("Kalendereintrag nicht gefunden"));
+        entry.setDateTime(request.getDateTime());
+        CalenderEntry saved = repository.save(entry);
+        return toDto(saved);
     }
 
     public CalenderEntryResponse updateEntry(Long id, CalenderEntryRequest request) {
@@ -37,7 +53,9 @@ public class CalenderEntryService {
     }
 
     public void deleteEntry(Long id) {
-        if(repository.existsById(id)) {
+        if(!repository.existsById(id)) {
+            throw new RuntimeException("Kalendereintag nicht gefunden");
+        } else {
             repository.deleteById(id);
         }
     }
