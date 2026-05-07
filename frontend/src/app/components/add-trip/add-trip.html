@@ -1,0 +1,67 @@
+<div class="page">
+  <div class="card">
+
+    @if (success) {
+      <div class="success">
+        <div class="check-circle">✓</div>
+        <h2>Reise angelegt!</h2>
+        <p class="success-detail">{{ name }} → {{ destination }}</p>
+        <button class="btn-primary" (click)="reset()">Weitere Reise anlegen</button>
+      </div>
+    }
+
+    @if (!success) {
+      <form (ngSubmit)="submit()">
+
+        <div class="form-header">
+          <h1>Reise anlegen</h1>
+          <p>Fülle alle Felder aus um deine Reise zu speichern.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="fields">
+
+          <div class="field">
+            <label for="name">Reisename</label>
+            <input id="name" type="text" [(ngModel)]="name"
+                   name="name" placeholder="z.B. Sommerurlaub Barcelona" autocomplete="off"/>
+          </div>
+
+          <div class="field">
+            <label for="destination">Zielort</label>
+            <input id="destination" type="text" [(ngModel)]="destination"
+                   name="destination" placeholder="z.B. Barcelona, Spanien" autocomplete="off"/>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="startDate">Startdatum</label>
+              <input id="startDate" type="date" [(ngModel)]="startDate" name="startDate"/>
+            </div>
+            <div class="field">
+              <label for="endDate">Enddatum</label>
+              <input id="endDate" type="date" [(ngModel)]="endDate" name="endDate"/>
+            </div>
+          </div>
+
+          @if (errorMsg) {
+            <p class="error-msg">{{ errorMsg }}</p>
+          }
+
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="actions">
+          <button type="button" class="btn-ghost" (click)="reset()">Zurücksetzen</button>
+          <button type="submit" class="btn-primary" [disabled]="!isValid || loading">
+            {{ loading ? 'Speichern...' : 'Reise anlegen' }}
+          </button>
+        </div>
+
+      </form>
+    }
+
+  </div>
+</div>

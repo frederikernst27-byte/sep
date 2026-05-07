@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { Login } from './components/login/login';
+import { AddTripComponent } from './components/add-trip/add-trip';
 
 export const routes: Routes = [
-  { path: 'login', component: Login },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: 'add-trip', component: AddTripComponent },
+  { path: '', redirectTo: 'add-trip', pathMatch: 'full' }  // optional
 ];
