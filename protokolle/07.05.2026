@@ -1,0 +1,50 @@
+---
+
+07.05.2026 - 10:00 Uhr
+
+Alle Teilnehmer anwesend, Alex als PO wurde heute vertreten
+
+Besprechung des ersten Sprints:
+
+- Definition of done: sollten wir ergänzen
+
+Multi-User-US:
+
+- Registrierung wird noch ergänzt, war durch US nicht zwingend vorgegeben
+
+Kalender-View-US:
+
+- Einträge funktionieren noch nicht ganz, aber Backend läuft: Events sind anlegbar
+
+Reise-Anlegen-US:
+
+- Frontend wurde vorbereitet, muss an Backend angeschlossen werden → DB
+
+Retro/Review: 
+
+- Termine öfter abhalten (privat, für Zusammenarbeit)
+- gute Gruppendynamik
+- Aufteilung der Aufgaben war bisher gut
+- spät gestartet in den ersten Sprint
+- Tests dringend nötig
+- sehr abgekoppelt gearbeitet, mehr zusammenhängend arbeiten
+
+Feedback an uns als Gruppe:
+
+- mehr an Akzeptanzkriterien orientieren
+- wir haben viele einzelne Sachen gemacht, aber wir müssen das als Zusammenhängendes testen
+
+Rückfragen:
+
+- Zwischenabnahme: Termine veröffentlicht
+
+ToDos:
+
+- Definition of done, Unit-Tests, Seeding, nächsten Montag dann Sprint 2 → welche US kommen in Frage? Gerne von uns schon abschätzen.
+- eigene Wiki-Seite als Doku
+
+Wiki:
+
+Defintion of done, Coding Konvention, coporate design, einheitliche farben, checkliste code review, Protokolle, entity relationship model für DB zb, artefakte
+
+Plan → Wiki
