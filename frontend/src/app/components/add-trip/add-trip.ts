@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-trip',
@@ -20,7 +21,7 @@ export class AddTripComponent {
   errorMsg = '';
   loading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   get isValid(): boolean {
     return !!this.name && !!this.destination && !!this.startDate && !!this.endDate && this.endDate >= this.startDate;
@@ -37,7 +38,7 @@ export class AddTripComponent {
       startDate: this.startDate,
       endDate: this.endDate
     }).subscribe({
-      next: () => { this.success = true; this.loading = false; },
+      next: () => { this.router.navigate(['/calendar']); },
       error: () => { this.errorMsg = 'Fehler — ist das Backend gestartet?'; this.loading = false; }
     });
   }

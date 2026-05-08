@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { AddTripComponent } from './components/add-trip/add-trip';
+import { CalendarView } from './components/calendar-view/calendar-view';
 
 export const routes: Routes = [
+  { path: 'calendar', component: CalendarView },
   { path: 'add-trip', component: AddTripComponent },
-  { path: '', redirectTo: 'add-trip', pathMatch: 'full' }  // optional
+  { path: '', redirectTo: 'calendar', pathMatch: 'full' }  // optional
 ];
