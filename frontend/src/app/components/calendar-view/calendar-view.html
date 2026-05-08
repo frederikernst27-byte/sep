@@ -1,1 +1,59 @@
-<p>calendar-view works!</p>
+<div class="page">
+  <main class="calendar-shell">
+    <section class="calendar-panel">
+      <header class="calendar-header">
+        <button type="button" class="month-button" (click)="previousMonth()" aria-label="Vorheriger Monat">
+          &lt;
+        </button>
+        <h1>{{ monthLabel }}</h1>
+        <button type="button" class="month-button" (click)="nextMonth()" aria-label="Naechster Monat">
+          &gt;
+        </button>
+      </header>
+
+      @if (loading) {
+        <p class="info">Reisen werden geladen...</p>
+      }
+
+      @if (errorMsg) {
+        <p class="error">{{ errorMsg }}</p>
+      }
+
+      <div class="weekdays">
+        @for (weekday of weekdays; track weekday) {
+          <span>{{ weekday }}</span>
+        }
+      </div>
+
+      <div class="calendar-grid">
+        @for (day of calendarDays; track day.dateKey) {
+          <div class="day" [class.muted]="!day.isCurrentMonth">
+            <span class="day-number">{{ day.dayNumber }}</span>
+            <div class="entries">
+              @for (trip of day.trips; track trip.id) {
+                <button type="button" class="entry" (click)="selectTrip(trip)">
+                  <strong>{{ trip.name }}</strong>
+                  <span>{{ trip.destination }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    @if (selectedTrip) {
+      <section class="detail-panel">
+        <button type="button" class="close-button" (click)="closeDetails()" aria-label="Details schliessen">
+          &times;
+        </button>
+        <h2>{{ selectedTrip.name }}</h2>
+        <p>{{ selectedTrip.destination }}</p>
+        <p>{{ selectedTrip.startDate }} bis {{ selectedTrip.endDate }}</p>
+        <button type="button" class="delete-button" (click)="deleteSelectedTrip()" [disabled]="deleting">
+          {{ deleting ? 'Loeschen...' : 'Loeschen' }}
+        </button>
+      </section>
+    }
+  </main>
+</div>
