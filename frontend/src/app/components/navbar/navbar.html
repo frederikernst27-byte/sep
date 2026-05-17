@@ -1,0 +1,27 @@
+<nav class="navbar">
+  <span class="navbar-title">Travel App</span>
+
+  <button class="menu-button" (click)="toggleMenu()">
+    ⋮
+  </button>
+
+  <div class="dropdown" *ngIf="menuOpen">
+    <button class="dropdown-item" (click)="goToProfile()">
+      👤 Profil
+    </button>
+    <button class="dropdown-item logout-item" (click)="openLogoutDialog()">
+      🚪 Logout
+    </button>
+  </div>
+</nav>
+
+<div class="overlay" *ngIf="showLogoutDialog" (click)="cancelLogout()">
+  <div class="logout-dialog" (click)="$event.stopPropagation()">
+    <h3>Abmelden?</h3>
+    <p>Möchtest du dich wirklich ausloggen?</p>
+    <div class="dialog-buttons">
+      <button class="btn-cancel" (click)="cancelLogout()">Abbrechen</button>
+      <button class="btn-logout" (click)="confirmLogout()">Ausloggen</button>
+    </div>
+  </div>
+</div>
