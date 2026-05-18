@@ -1,23 +1,56 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
+  gap: 24px;
+  padding: 12px 28px;
   background-color: #2c3e50;
   color: white;
   position: relative;
+  min-height: 56px;
 }
 
 .navbar-title {
+  color: white;
   font-size: 18px;
   font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 18px;
+}
+
+.navbar-link {
+  padding: 9px 14px;
+  border-radius: 8px;
+  color: #dbe6f0;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navbar-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.navbar-link.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
 }
 
 .menu-button {
+  margin-left: auto;
   background: none;
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 800;
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 4px;
@@ -127,4 +160,21 @@
 
 .btn-logout:hover {
   background: #c0392b;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .navbar-links {
+    margin-left: 0;
+    gap: 4px;
+  }
+
+  .navbar-link {
+    padding: 8px 9px;
+    font-size: 13px;
+  }
 }
