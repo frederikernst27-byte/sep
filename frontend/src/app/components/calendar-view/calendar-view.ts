@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Trip {
   id: number;
@@ -22,6 +23,13 @@ interface CalendarListItem {
   trip: Trip;
   durationLabel: string;
   statusLabel: string;
+}
+
+interface TripStats {
+  total: number;
+  upcoming: number;
+  active: number;
+  past: number;
 }
 
 type CalendarViewMode = 'month' | 'week' | 'day' | 'list';
@@ -49,7 +57,10 @@ export class CalendarView implements OnInit {
     { value: 'list', label: 'Liste' }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadTrips();
@@ -148,6 +159,25 @@ export class CalendarView implements OnInit {
       }));
   }
 
+  get tripStats(): TripStats {
+    return this.trips.reduce(
+      (stats, trip) => {
+        const status = this.statusFor(trip);
+
+        if (status === 'Kommend') {
+          stats.upcoming += 1;
+        } else if (status === 'Vergangen') {
+          stats.past += 1;
+        } else {
+          stats.active += 1;
+        }
+
+        return stats;
+      },
+      { total: this.trips.length, upcoming: 0, active: 0, past: 0 }
+    );
+  }
+
   get todayKey(): string {
     return this.toDateKey(new Date());
   }
@@ -164,8 +194,20 @@ export class CalendarView implements OnInit {
     this.movePeriod(1);
   }
 
+  previousMonth(): void {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
+  }
+
+  nextMonth(): void {
+    this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+  }
+
   resetToToday(): void {
     this.currentDate = new Date();
+  }
+
+  navigateToAddTrip(): void {
+    this.router.navigate(['/add-trip']);
   }
 
   formatWeekday(date: Date): string {
