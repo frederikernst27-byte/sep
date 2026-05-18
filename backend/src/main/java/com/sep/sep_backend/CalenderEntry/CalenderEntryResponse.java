@@ -7,6 +7,10 @@ public class CalenderEntryResponse {
     private String name;
     private String description;
     private LocalDateTime dateTime;
+    private LocalDateTime endDateTime;
+    private String location;
+    private String bookingType;
+    private boolean autoCreated;
 
     private Long userId;
     private Long tripId;
@@ -28,6 +32,30 @@ public class CalenderEntryResponse {
     }
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+    public String getLocation() {
+        return location;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    public String getBookingType() {
+        return bookingType;
+    }
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
+    }
+    public boolean isAutoCreated() {
+        return autoCreated;
+    }
+    public void setAutoCreated(boolean autoCreated) {
+        this.autoCreated = autoCreated;
     }
     public void setId(Long id) {
         this.id = id;

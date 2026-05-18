@@ -54,7 +54,8 @@ h2 {
   font-size: 1.125rem;
 }
 
-.period-button {
+.period-button,
+.month-button {
   width: 38px;
   height: 38px;
   border: 1px solid #e8e8e8;
@@ -67,19 +68,23 @@ h2 {
 }
 
 .period-button:hover,
+.month-button:hover,
 .today-button:hover,
-.view-button:hover {
+.view-button:hover,
+.add-trip-button:hover {
   border-color: #ccc;
   background: #f3f3f3;
 }
 
-.period-button:disabled {
+.period-button:disabled,
+.month-button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
 }
 
 .today-button,
-.view-button {
+.view-button,
+.add-trip-button {
   border: 1px solid #e8e8e8;
   background: #fafafa;
   cursor: pointer;
@@ -114,6 +119,56 @@ h2 {
   border-color: #1d4ed8;
   background: #1d4ed8;
   color: #fff;
+}
+
+.calendar-action-bar {
+  padding: 0.85rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(84px, 1fr)) auto;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fbfcff;
+}
+
+.stat {
+  min-height: 52px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #edf1f7;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.stat strong,
+.stat span {
+  display: block;
+}
+
+.stat strong {
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.stat span {
+  margin-top: 0.2rem;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.add-trip-button {
+  min-height: 44px;
+  padding: 0.6rem 0.95rem;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.add-trip-button:hover {
+  border-color: #111827;
+  background: #1f2937;
 }
 
 .weekdays,
@@ -431,6 +486,15 @@ h2 {
   .view-switcher {
     padding: 0.625rem;
     overflow-x: auto;
+  }
+
+  .calendar-action-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0.625rem;
+  }
+
+  .add-trip-button {
+    grid-column: 1 / -1;
   }
 
   .view-button {
