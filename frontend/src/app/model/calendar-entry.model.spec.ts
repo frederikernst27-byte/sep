@@ -1,7 +1,13 @@
-import { CalendarEntry } from './calendar-entrymodel';
+import { CalendarEntry } from './calendar-entry.model';
 
 describe('CalendarEntry', () => {
   it('should create an instance', () => {
-    expect(new CalendarEntry()).toBeTruthy();
+    const entry: CalendarEntry = {
+      id: 1,
+      name: 'Testeintrag',
+      description: 'Beschreibung'
+    };
+
+    expect(entry).toBeTruthy();
   });
 });
