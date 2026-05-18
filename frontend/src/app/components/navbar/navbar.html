@@ -1,16 +1,35 @@
 <nav class="navbar">
-  <span class="navbar-title">Travel App</span>
+  <a class="navbar-title" routerLink="/dashboard">Travel App</a>
 
-  <button class="menu-button" (click)="toggleMenu()">
-    ⋮
+  <div class="navbar-links" aria-label="Hauptnavigation">
+    <a
+      class="navbar-link"
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Dashboard
+    </a>
+    <a
+      class="navbar-link"
+      routerLink="/calendar"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Kalender
+    </a>
+  </div>
+
+  <button class="menu-button" (click)="toggleMenu()" aria-label="Menue oeffnen">
+    ...
   </button>
 
   <div class="dropdown" *ngIf="menuOpen">
     <button class="dropdown-item" (click)="goToProfile()">
-      👤 Profil
+      Profil
     </button>
     <button class="dropdown-item logout-item" (click)="openLogoutDialog()">
-      🚪 Logout
+      Logout
     </button>
   </div>
 </nav>
@@ -18,7 +37,7 @@
 <div class="overlay" *ngIf="showLogoutDialog" (click)="cancelLogout()">
   <div class="logout-dialog" (click)="$event.stopPropagation()">
     <h3>Abmelden?</h3>
-    <p>Möchtest du dich wirklich ausloggen?</p>
+    <p>Moechtest du dich wirklich ausloggen?</p>
     <div class="dialog-buttons">
       <button class="btn-cancel" (click)="cancelLogout()">Abbrechen</button>
       <button class="btn-logout" (click)="confirmLogout()">Ausloggen</button>
