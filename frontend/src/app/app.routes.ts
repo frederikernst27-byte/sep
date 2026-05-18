@@ -7,5 +7,5 @@ export const routes: Routes = [
   { path: 'calendar', component: CalendarView },
   { path: 'login', component: Login},
   { path: 'add-trip', component: AddTripComponent },
-  { path: '', redirectTo: 'calendar', pathMatch: 'full' }  // optional
+  { path: '', redirectTo: 'login', pathMatch: 'full' }  // optional
 ];
