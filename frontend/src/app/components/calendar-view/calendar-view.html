@@ -2,14 +2,42 @@
   <main class="calendar-shell">
     <section class="calendar-panel">
       <header class="calendar-header">
-        <button type="button" class="month-button" (click)="previousMonth()" aria-label="Vorheriger Monat">
+        <button
+          type="button"
+          class="period-button"
+          (click)="previousPeriod()"
+          [disabled]="activeView === 'list'"
+          aria-label="Vorheriger Zeitraum"
+        >
           &lt;
         </button>
-        <h1>{{ monthLabel }}</h1>
-        <button type="button" class="month-button" (click)="nextMonth()" aria-label="Naechster Monat">
+        <div class="calendar-title">
+          <h1>{{ periodLabel }}</h1>
+          <button type="button" class="today-button" (click)="resetToToday()">Heute</button>
+        </div>
+        <button
+          type="button"
+          class="period-button"
+          (click)="nextPeriod()"
+          [disabled]="activeView === 'list'"
+          aria-label="Naechster Zeitraum"
+        >
           &gt;
         </button>
       </header>
+
+      <nav class="view-switcher" aria-label="Kalenderansicht waehlen">
+        @for (option of viewOptions; track option.value) {
+          <button
+            type="button"
+            class="view-button"
+            [class.active]="activeView === option.value"
+            (click)="setView(option.value)"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </nav>
 
       @if (loading) {
         <p class="info">Reisen werden geladen...</p>
@@ -19,27 +47,108 @@
         <p class="error">{{ errorMsg }}</p>
       }
 
-      <div class="weekdays">
-        @for (weekday of weekdays; track weekday) {
-          <span>{{ weekday }}</span>
-        }
-      </div>
+      @switch (activeView) {
+        @case ('month') {
+          <div class="weekdays">
+            @for (weekday of weekdays; track weekday) {
+              <span>{{ weekday }}</span>
+            }
+          </div>
 
-      <div class="calendar-grid">
-        @for (day of calendarDays; track day.dateKey) {
-          <div class="day" [class.muted]="!day.isCurrentMonth">
-            <span class="day-number">{{ day.dayNumber }}</span>
-            <div class="entries">
-              @for (trip of day.trips; track trip.id) {
-                <button type="button" class="entry" (click)="selectTrip(trip)">
+          <div class="calendar-grid">
+            @for (day of calendarDays; track day.dateKey) {
+              <div class="day" [class.muted]="!day.isCurrentMonth" [class.today]="day.isToday">
+                <span class="day-number">{{ day.dayNumber }}</span>
+                <div class="entries">
+                  @for (trip of day.trips; track trip.id) {
+                    <button type="button" class="entry" (click)="selectTrip(trip)">
+                      <strong>{{ trip.name }}</strong>
+                      <span>{{ trip.destination }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @case ('week') {
+          <div class="weekdays">
+            @for (weekday of weekdays; track weekday) {
+              <span>{{ weekday }}</span>
+            }
+          </div>
+
+          <div class="week-grid">
+            @for (day of weekDays; track day.dateKey) {
+              <article class="week-day" [class.today]="day.isToday">
+                <header>
+                  <span>{{ day.dayNumber }}</span>
+                  <small>{{ formatMonthShort(day.date) }}</small>
+                </header>
+
+                @if (day.trips.length === 0) {
+                  <p class="empty">Keine Reisen</p>
+                }
+
+                <div class="entries">
+                  @for (trip of day.trips; track trip.id) {
+                    <button type="button" class="entry" (click)="selectTrip(trip)">
+                      <strong>{{ trip.name }}</strong>
+                      <span>{{ trip.destination }}</span>
+                    </button>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        }
+
+        @case ('day') {
+          <section class="day-agenda" [class.today]="currentDay.isToday">
+            <header>
+              <span class="agenda-date">{{ currentDay.dayNumber }}</span>
+              <div>
+                <h2>{{ formatWeekday(currentDay.date) }}</h2>
+                <p>{{ formatLongDate(currentDay.date) }}</p>
+              </div>
+            </header>
+
+            @if (currentDay.trips.length === 0) {
+              <p class="empty large">Keine Reisen an diesem Tag.</p>
+            }
+
+            <div class="agenda-list">
+              @for (trip of currentDay.trips; track trip.id) {
+                <button type="button" class="agenda-entry" (click)="selectTrip(trip)">
+                  <span class="entry-date">{{ trip.startDate }} - {{ trip.endDate }}</span>
                   <strong>{{ trip.name }}</strong>
                   <span>{{ trip.destination }}</span>
                 </button>
               }
             </div>
-          </div>
+          </section>
         }
-      </div>
+
+        @case ('list') {
+          <section class="trip-list">
+            @if (sortedTrips.length === 0) {
+              <p class="empty large">Noch keine Reisen vorhanden.</p>
+            }
+
+            @for (item of sortedTrips; track item.trip.id) {
+              <button type="button" class="list-entry" (click)="selectTrip(item.trip)">
+                <span class="status">{{ item.statusLabel }}</span>
+                <div>
+                  <strong>{{ item.trip.name }}</strong>
+                  <span>{{ item.trip.destination }}</span>
+                </div>
+                <time>{{ item.durationLabel }}</time>
+              </button>
+            }
+          </section>
+        }
+      }
     </section>
 
     @if (selectedTrip) {
