@@ -15,7 +15,26 @@
 
         <div class="form-header">
           <h1>Reise anlegen</h1>
-          <p>Fülle alle Felder aus um deine Reise zu speichern.</p>
+          <p>Fülle alle Felder aus oder lade ein Dokument hoch.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Upload Bereich -->
+        <div class="upload-section">
+          <input type="file" #fileInput accept=".pdf,.docx,.jpg,.jpeg,.png"
+                 style="display:none" (change)="onFileSelected($event)">
+
+          <button type="button" class="btn-upload"
+                  (click)="fileInput.click()" [disabled]="extracting">
+            📎 {{ extracting ? 'Wird extrahiert...' : 'Dokument hochladen' }}
+          </button>
+
+          @if (extracting) {
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          }
         </div>
 
         <div class="divider"></div>
