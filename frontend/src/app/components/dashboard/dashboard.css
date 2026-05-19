@@ -1,0 +1,66 @@
+.dashboard-page {
+  min-height: calc(100vh - 56px);
+  padding: 38px clamp(18px, 4vw, 64px) 56px;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.09), transparent 34%),
+    linear-gradient(180deg, #f7f9fc 0%, #eef2f7 100%);
+  color: #101827;
+}
+
+.metric-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.metric-card {
+  min-height: 126px;
+  padding: 18px;
+}
+
+.metric-card span {
+  display: block;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 12px;
+  color: #0f172a;
+  font-size: 2.15rem;
+  line-height: 1;
+}
+
+.metric-card.highlight {
+  background: #10233f;
+}
+
+.metric-card.highlight span,
+.metric-card.highlight strong {
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-page {
+    padding: 24px 12px 40px;
+  }
+}

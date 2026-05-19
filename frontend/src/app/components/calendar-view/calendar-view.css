@@ -32,6 +32,13 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
+.calendar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
 h1,
 h2 {
   margin: 0;
@@ -47,6 +54,7 @@ h2 {
   font-size: 1.125rem;
 }
 
+.period-button,
 .month-button {
   width: 38px;
   height: 38px;
@@ -59,9 +67,108 @@ h2 {
   color: #444;
 }
 
-.month-button:hover {
+.period-button:hover,
+.month-button:hover,
+.today-button:hover,
+.view-button:hover,
+.add-trip-button:hover {
   border-color: #ccc;
   background: #f3f3f3;
+}
+
+.period-button:disabled,
+.month-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.today-button,
+.view-button,
+.add-trip-button {
+  border: 1px solid #e8e8e8;
+  background: #fafafa;
+  cursor: pointer;
+  font: inherit;
+  color: #444;
+}
+
+.today-button {
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.view-switcher {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.view-button {
+  min-width: 76px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.view-button.active {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.calendar-action-bar {
+  padding: 0.85rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(84px, 1fr)) auto;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fbfcff;
+}
+
+.stat {
+  min-height: 52px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #edf1f7;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.stat strong,
+.stat span {
+  display: block;
+}
+
+.stat strong {
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.stat span {
+  margin-top: 0.2rem;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.add-trip-button {
+  min-height: 44px;
+  padding: 0.6rem 0.95rem;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.add-trip-button:hover {
+  border-color: #111827;
+  background: #1f2937;
 }
 
 .weekdays,
@@ -111,6 +218,13 @@ h2 {
   color: #aaa;
 }
 
+.today .day-number,
+.week-day.today header span,
+.day-agenda.today .agenda-date {
+  background: #1d4ed8;
+  color: #fff;
+}
+
 .entries {
   margin-top: 0.375rem;
   display: flex;
@@ -139,6 +253,150 @@ h2 {
 
 .entry strong {
   display: block;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-height: 360px;
+}
+
+.week-day {
+  min-height: 360px;
+  padding: 0.75rem;
+  border-right: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.week-day:last-child {
+  border-right: none;
+}
+
+.week-day header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.week-day header span,
+.agenda-date {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #111;
+  font-weight: 700;
+}
+
+.week-day header small {
+  color: #777;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.day-agenda,
+.trip-list {
+  padding: 1.25rem;
+}
+
+.day-agenda header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.day-agenda h2 {
+  text-transform: capitalize;
+}
+
+.day-agenda p {
+  margin: 0.25rem 0 0;
+  color: #666;
+}
+
+.agenda-list,
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.agenda-list {
+  margin-top: 1rem;
+}
+
+.agenda-entry,
+.list-entry {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  color: #111;
+  text-align: left;
+}
+
+.agenda-entry:hover,
+.list-entry:hover {
+  border-color: #bfdbfe;
+  background: #f8fbff;
+}
+
+.agenda-entry strong,
+.agenda-entry span,
+.list-entry strong,
+.list-entry span,
+.list-entry time {
+  display: block;
+}
+
+.agenda-entry strong,
+.list-entry strong {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+}
+
+.entry-date,
+.list-entry time {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.list-entry {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status {
+  width: fit-content;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.empty {
+  margin: 0.5rem 0 0;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.empty.large {
+  margin: 1rem 0 0;
+  font-size: 0.95rem;
 }
 
 .detail-panel {
@@ -208,8 +466,40 @@ h2 {
     padding: 0;
   }
 
+  .calendar-header {
+    padding: 0.875rem;
+  }
+
+  .calendar-title {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  h1 {
+    font-size: 1rem;
+  }
+
   .calendar-panel {
     border-radius: 0;
+  }
+
+  .view-switcher {
+    padding: 0.625rem;
+    overflow-x: auto;
+  }
+
+  .calendar-action-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0.625rem;
+  }
+
+  .add-trip-button {
+    grid-column: 1 / -1;
+  }
+
+  .view-button {
+    min-width: 70px;
+    flex: 0 0 auto;
   }
 
   .day {
@@ -219,5 +509,21 @@ h2 {
 
   .entry {
     font-size: 0.6875rem;
+  }
+
+  .week-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .week-day {
+    min-height: 120px;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .list-entry {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
   }
 }

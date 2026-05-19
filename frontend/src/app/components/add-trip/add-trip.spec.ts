@@ -3,6 +3,8 @@ import { AddTripComponent } from './add-trip.component';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { AddTripComponent } from './add-trip';
+
 describe('AddTripComponent', () => {
   let component: AddTripComponent;
   let fixture: ComponentFixture<AddTripComponent>;
