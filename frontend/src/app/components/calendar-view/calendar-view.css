@@ -1,8 +1,7 @@
 .page {
-  min-height: 100vh;
+  min-height: calc(100svh - 64px);
   background: #f4f4f2;
-  padding: 2rem 1rem;
-  font-family: Inter, sans-serif;
+  padding: clamp(1rem, 4vw, 2rem);
   color: #111;
 }
 
@@ -10,6 +9,8 @@
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
+  display: grid;
+  gap: 1rem;
 }
 
 .calendar-panel,
@@ -25,16 +26,19 @@
 
 .calendar-header {
   min-height: 72px;
-  padding: 1rem 1.25rem;
+  padding: 1rem clamp(0.875rem, 3vw, 1.25rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   border-bottom: 1px solid #f0f0f0;
 }
 
 .calendar-title {
+  min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   text-align: center;
 }
@@ -46,8 +50,9 @@ h2 {
 }
 
 h1 {
-  font-size: 1.375rem;
+  font-size: clamp(1rem, 3vw, 1.375rem);
   text-transform: capitalize;
+  overflow-wrap: anywhere;
 }
 
 h2 {
@@ -55,6 +60,7 @@ h2 {
 }
 
 .period-button {
+  flex: 0 0 auto;
   width: 38px;
   height: 38px;
   border: 1px solid #e8e8e8;
@@ -95,15 +101,18 @@ h2 {
 }
 
 .view-switcher {
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem clamp(0.875rem, 3vw, 1.25rem);
   display: flex;
   gap: 0.5rem;
   border-bottom: 1px solid #f0f0f0;
   background: #fff;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .view-button {
   min-width: 76px;
+  flex: 0 0 auto;
   padding: 0.55rem 0.85rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -120,6 +129,11 @@ h2 {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-grid,
+.week-grid {
+  min-width: 0;
 }
 
 .weekdays {
@@ -141,6 +155,7 @@ h2 {
   border-right: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
   background: #fff;
+  min-width: 0;
 }
 
 .day:nth-child(7n) {
@@ -190,6 +205,7 @@ h2 {
   line-height: 1.25;
   text-align: left;
   overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .entry:hover {
@@ -211,6 +227,7 @@ h2 {
   padding: 0.75rem;
   border-right: 1px solid #f0f0f0;
   background: #fff;
+  min-width: 0;
 }
 
 .week-day:last-child {
@@ -246,7 +263,7 @@ h2 {
 
 .day-agenda,
 .trip-list {
-  padding: 1.25rem;
+  padding: clamp(1rem, 3vw, 1.25rem);
 }
 
 .day-agenda header {
@@ -288,6 +305,7 @@ h2 {
   font: inherit;
   color: #111;
   text-align: left;
+  min-width: 0;
 }
 
 .agenda-entry:hover,
@@ -318,9 +336,15 @@ h2 {
 
 .list-entry {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(72px, 92px) minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
+}
+
+.list-entry div,
+.list-entry time {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .status {
@@ -346,7 +370,6 @@ h2 {
 
 .detail-panel {
   position: relative;
-  margin-top: 1rem;
   padding: 1.25rem;
 }
 
@@ -413,11 +436,13 @@ h2 {
 
   .calendar-header {
     padding: 0.875rem;
+    align-items: stretch;
   }
 
   .calendar-title {
     flex-direction: column;
     gap: 0.35rem;
+    flex: 1 1 auto;
   }
 
   h1 {
@@ -461,5 +486,56 @@ h2 {
   .list-entry {
     grid-template-columns: 1fr;
     gap: 0.45rem;
+  }
+
+  .detail-panel {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+@media (max-width: 460px) {
+  .weekdays span {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.68rem;
+  }
+
+  .day-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.78rem;
+  }
+
+  .entries {
+    gap: 0.2rem;
+  }
+
+  .entry {
+    padding: 0.3rem 0.35rem;
+  }
+
+  .entry span {
+    display: none;
+  }
+
+  .day-agenda header {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .calendar-header {
+    gap: 0.45rem;
+  }
+
+  .period-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .today-button {
+    width: 100%;
   }
 }

@@ -1,18 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
 .page {
-  min-height: 100vh;
+  min-height: calc(100svh - 64px);
   background: #f4f4f2;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
-  font-family: 'Inter', sans-serif;
+  padding: clamp(1rem, 4vw, 2rem);
 }
 
 .card {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: 0 2px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
   width: 100%;
   max-width: 480px;
@@ -20,11 +17,11 @@
 }
 
 .form-header {
-  padding: 2rem 2rem 1.5rem;
+  padding: clamp(1.25rem, 5vw, 2rem) clamp(1rem, 5vw, 2rem) 1.25rem;
 }
 
 .form-header h1 {
-  font-size: 1.375rem;
+  font-size: clamp(1.2rem, 5vw, 1.375rem);
   font-weight: 600;
   color: #111;
   margin-bottom: 0.25rem;
@@ -41,7 +38,7 @@
 }
 
 .fields {
-  padding: 1.5rem 2rem;
+  padding: clamp(1rem, 5vw, 1.5rem) clamp(1rem, 5vw, 2rem);
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
@@ -66,8 +63,9 @@ label {
 }
 
 input {
-  font: inherit;
   font-size: 0.9375rem;
+  min-height: 44px;
+  width: 100%;
   padding: 0.625rem 0.875rem;
   border: 1.5px solid #e8e8e8;
   border-radius: 10px;
@@ -88,10 +86,12 @@ input:focus {
 .error-msg {
   font-size: 0.8125rem;
   color: #dc2626;
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .actions {
-  padding: 1.25rem 2rem;
+  padding: 1.25rem clamp(1rem, 5vw, 2rem);
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
@@ -138,3 +138,33 @@ button {
 
 .success h2 { font-size: 1.125rem; font-weight: 600; color: #111; }
 .success-detail { font-size: 0.875rem; color: #666; }
+
+@media (max-width: 560px) {
+  .page {
+    align-items: flex-start;
+  }
+
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button,
+  .success .btn-primary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .page {
+    padding-inline: 0;
+  }
+
+  .card {
+    min-height: calc(100svh - 64px);
+    border-radius: 0;
+  }
+}
