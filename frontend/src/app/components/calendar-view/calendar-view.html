@@ -4,7 +4,7 @@
       <header class="calendar-header">
         <button
           type="button"
-          class="period-button"
+          class="period-button month-button"
           (click)="previousPeriod()"
           [disabled]="activeView === 'list'"
           aria-label="Vorheriger Zeitraum"
@@ -17,7 +17,7 @@
         </div>
         <button
           type="button"
-          class="period-button"
+          class="period-button month-button"
           (click)="nextPeriod()"
           [disabled]="activeView === 'list'"
           aria-label="Naechster Zeitraum"
@@ -38,6 +38,28 @@
           </button>
         }
       </nav>
+
+      <section class="calendar-action-bar" aria-label="Reiseuebersicht">
+        <div class="stat">
+          <strong>{{ tripStats.total }}</strong>
+          <span>Reisen</span>
+        </div>
+        <div class="stat">
+          <strong>{{ tripStats.active }}</strong>
+          <span>Aktuell</span>
+        </div>
+        <div class="stat">
+          <strong>{{ tripStats.upcoming }}</strong>
+          <span>Kommend</span>
+        </div>
+        <div class="stat">
+          <strong>{{ tripStats.past }}</strong>
+          <span>Vergangen</span>
+        </div>
+        <button type="button" class="add-trip-button" (click)="navigateToAddTrip()">
+          Reise anlegen
+        </button>
+      </section>
 
       @if (loading) {
         <p class="info">Reisen werden geladen...</p>

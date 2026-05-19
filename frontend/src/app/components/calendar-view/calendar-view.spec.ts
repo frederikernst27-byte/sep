@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 import { CalendarView } from './calendar-view';
 
@@ -12,7 +13,7 @@ describe('CalendarView', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CalendarView],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
     })
     .compileComponents();
 
@@ -58,5 +59,19 @@ describe('CalendarView', () => {
     component.setView('month');
     expect(component.activeView).toBe('month');
     expect(component.trips).toEqual(trips);
+  });
+
+  it('should keep old month navigation methods available', () => {
+    component.currentDate = new Date(2026, 6, 15);
+
+    component.previousMonth();
+    expect(component.currentDate.getFullYear()).toBe(2026);
+    expect(component.currentDate.getMonth()).toBe(5);
+    expect(component.currentDate.getDate()).toBe(1);
+
+    component.nextMonth();
+    expect(component.currentDate.getFullYear()).toBe(2026);
+    expect(component.currentDate.getMonth()).toBe(6);
+    expect(component.currentDate.getDate()).toBe(1);
   });
 });
