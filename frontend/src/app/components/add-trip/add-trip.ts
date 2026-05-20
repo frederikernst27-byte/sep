@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-trip.css'
 })
 export class AddTripComponent {
-
   name = '';
   destination = '';
   startDate = '';
@@ -23,15 +22,26 @@ export class AddTripComponent {
   loading = false;
   extracting = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   get isValid(): boolean {
-    return !!this.name && !!this.destination && !!this.startDate && !!this.endDate && this.endDate >= this.startDate;
+    return !!this.name &&
+      !!this.destination &&
+      !!this.startDate &&
+      !!this.endDate &&
+      this.endDate >= this.startDate;
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (!file) return;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
 
     this.errorMsg = '';
     this.extracting = true;
@@ -41,10 +51,19 @@ export class AddTripComponent {
 
     this.http.post<any>('http://localhost:8080/api/extract', formData).subscribe({
       next: (data) => {
-        if (data.name)        this.name        = data.name;
-        if (data.destination) this.destination = data.destination;
-        if (data.startDate)   this.startDate   = data.startDate;
-        if (data.endDate)     this.endDate     = data.endDate;
+        if (data?.name) {
+          this.name = data.name;
+        }
+        if (data?.destination) {
+          this.destination = data.destination;
+        }
+        if (data?.startDate) {
+          this.startDate = data.startDate;
+        }
+        if (data?.endDate) {
+          this.endDate = data.endDate;
+        }
+
         this.extracting = false;
       },
       error: () => {
@@ -55,7 +74,10 @@ export class AddTripComponent {
   }
 
   submit(): void {
-    if (!this.isValid) return;
+    if (!this.isValid) {
+      return;
+    }
+
     this.loading = true;
     this.errorMsg = '';
 
@@ -65,8 +87,14 @@ export class AddTripComponent {
       startDate: this.startDate,
       endDate: this.endDate
     }).subscribe({
-      next: () => { this.router.navigate(['/calendar']); },
-      error: () => { this.errorMsg = 'Fehler — ist das Backend gestartet?'; this.loading = false; }
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/calendar']);
+      },
+      error: () => {
+        this.errorMsg = 'Fehler - ist das Backend gestartet?';
+        this.loading = false;
+      }
     });
   }
 
@@ -77,5 +105,7 @@ export class AddTripComponent {
     this.endDate = '';
     this.success = false;
     this.errorMsg = '';
+    this.loading = false;
+    this.extracting = false;
   }
 }
