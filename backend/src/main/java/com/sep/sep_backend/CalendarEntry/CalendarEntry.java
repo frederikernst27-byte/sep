@@ -1,8 +1,16 @@
-package com.sep.sep_backend.CalenderEntry;
+package com.sep.sep_backend.CalendarEntry;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 
-public class CalenderEntryResponse {
+@Entity
+public class CalendarEntry {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
@@ -15,23 +23,39 @@ public class CalenderEntryResponse {
     private Long userId;
     private Long tripId;
 
-    public String getName() {
-        return this.name;
+    public CalendarEntry(){}
+
+    public CalendarEntry(String name, String description, LocalDateTime dateTime, Long userId, Long tripId) {
+        this.name = name;
+        this.description = description;
+        this.dateTime = dateTime;
+        this.userId = userId;
+        this.tripId = tripId;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-    public String getDescription() {
-        return this.description;
+    public String getName() {
+        return name;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public long getId() {
+        return id;
     }
     public void setDescription(String description) {
         this.description = description;
     }
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public String getDescription() {
+        return description;
     }
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
     public LocalDateTime getEndDateTime() {
         return endDateTime;
@@ -57,22 +81,16 @@ public class CalenderEntryResponse {
     public void setAutoCreated(boolean autoCreated) {
         this.autoCreated = autoCreated;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public Long getUserId() {
+        return userId;
     }
-    public Long getId() {
-        return id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     public Long getTripId() {
         return tripId;
     }
     public void setTripId(Long tripId) {
         this.tripId = tripId;
-    }
-    public Long getUserId() {
-        return userId;
-    }
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

@@ -1,3 +1,5 @@
+spring.config.import=optional:classpath:application-local.properties
+
 spring.application.name=sep-ba
 
 spring.datasource.url=jdbc:postgresql://db:5432/sep
@@ -11,5 +13,5 @@ spring.sql.init.mode=always
 spring.servlet.multipart.max-file-size=10MB
 spring.servlet.multipart.max-request-size=10MB
 
-gemini.api.key=DEIN_GEMINI_API_KEY
-gemini.model=gemini-2.0-flash
+openrouter.api.key=DEIN_OPENROUTER_API_KEY
+openrouter.models=google/gemma-4-31b-it:free,nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free

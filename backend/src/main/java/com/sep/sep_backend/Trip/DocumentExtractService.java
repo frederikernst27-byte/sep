@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +28,11 @@ public class DocumentExtractService {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentExtractService.class);
 
-    @Value("${gemini.api.key}")
-    private String geminiApiKey;
+    @Value("${openrouter.api.key:}")
+    private String openRouterApiKey;
 
-    @Value("${gemini.model:gemini-2.0-flash}")
-    private String geminiModel;
+    @Value("${openrouter.models:google/gemma-4-31b-it:free,nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free,openrouter/free}")
+    private String openRouterModels;
 
     private final ObjectMapper mapper;
     private final RestTemplate restTemplate;
@@ -66,7 +68,7 @@ public class DocumentExtractService {
                     String text = new PDFTextStripper().getText(doc);
                     validateExtractedText(text);
                     log.info("PDF-Text erfolgreich gelesen, length={}", text.length());
-                    return callGeminiWithText(text);
+                    return callOpenRouterWithText(text);
                 }
             }
 
@@ -77,7 +79,7 @@ public class DocumentExtractService {
                     String text = extractor.getText();
                     validateExtractedText(text);
                     log.info("DOCX-Text erfolgreich gelesen, length={}", text.length());
-                    return callGeminiWithText(text);
+                    return callOpenRouterWithText(text);
                 }
             }
 
@@ -86,7 +88,7 @@ public class DocumentExtractService {
                 String mimeType = resolveMimeType(lowerFilename, file.getContentType());
                 String base64 = Base64.getEncoder().encodeToString(file.getBytes());
                 log.info("Bild vorbereitet, mimeType='{}', base64Length={}", mimeType, base64.length());
-                return callGeminiWithImage(base64, mimeType);
+                return callOpenRouterWithImage(base64, mimeType);
             }
 
             throw new RuntimeException("Dateityp nicht unterstützt. Bitte PDF, DOCX oder Bilddatei hochladen.");
@@ -100,163 +102,198 @@ public class DocumentExtractService {
         }
     }
 
-    private TripCreateDto callGeminiWithText(String text) throws Exception {
+    private TripCreateDto callOpenRouterWithText(String text) throws Exception {
         String shortenedText = text.length() > 12000 ? text.substring(0, 12000) : text;
 
-        String prompt = """
-                Extrahiere aus folgendem Dokumenttext Reisedaten als reines JSON.
-                Antworte ausschließlich mit gültigem JSON, ohne Markdown, ohne Erklärung.
+        List<Map<String, Object>> messages = List.of(
+                Map.of(
+                        "role", "system",
+                        "content", """
+                                Extrahiere aus Dokumenten Reisedaten als reines JSON.
+                                Antworte ausschließlich mit gültigem JSON, ohne Markdown, ohne Erklärung.
 
-                Erwartetes Format:
-                {
-                  "name": "kurzer Reisename",
-                  "destination": "Zielort",
-                  "startDate": "YYYY-MM-DD",
-                  "endDate": "YYYY-MM-DD"
-                }
-
-                Regeln:
-                - Falls ein Wert nicht gefunden wird, setze ihn auf null.
-                - Erfinde keine Daten.
-                - destination ist der Hauptzielort der Reise.
-                - name soll kurz und sinnvoll sein.
-
-                Dokumenttext:
-                """ + shortenedText;
-
-        Map<String, Object> body = Map.of(
-                "contents", List.of(
-                        Map.of(
-                                "parts", List.of(
-                                        Map.of("text", prompt)
-                                )
-                        )
+                                Regeln:
+                                - Falls ein Wert nicht gefunden wird, setze ihn auf null.
+                                - Erfinde keine Daten.
+                                - destination ist der Hauptzielort der Reise.
+                                - name soll kurz und sinnvoll sein.
+                                """
                 ),
-                "generationConfig", Map.of(
-                        "temperature", 0,
-                        "responseMimeType", "application/json"
+                Map.of(
+                        "role", "user",
+                        "content", """
+                                Extrahiere aus folgendem Dokumenttext Reisedaten.
+
+                                Dokumenttext:
+                                """ + shortenedText
                 )
         );
 
-        return sendGeminiRequest(body);
+        return sendOpenRouterRequest(messages);
     }
 
-    private TripCreateDto callGeminiWithImage(String base64, String mimeType) throws Exception {
-        String prompt = """
-                Extrahiere aus diesem Bild Reisedaten als reines JSON.
-                Antworte ausschließlich mit gültigem JSON, ohne Markdown, ohne Erklärung.
+    private TripCreateDto callOpenRouterWithImage(String base64, String mimeType) throws Exception {
+        List<Map<String, Object>> messages = List.of(
+                Map.of(
+                        "role", "system",
+                        "content", """
+                                Extrahiere aus Bildern Reisedaten als reines JSON.
+                                Antworte ausschließlich mit gültigem JSON, ohne Markdown, ohne Erklärung.
 
-                Erwartetes Format:
-                {
-                  "name": "kurzer Reisename",
-                  "destination": "Zielort",
-                  "startDate": "YYYY-MM-DD",
-                  "endDate": "YYYY-MM-DD"
-                }
-
-                Regeln:
-                - Falls ein Wert nicht erkennbar ist, setze ihn auf null.
-                - Erfinde keine Daten.
-                - destination ist der Hauptzielort der Reise.
-                - name soll kurz und sinnvoll sein.
-                """;
-
-        Map<String, Object> body = Map.of(
-                "contents", List.of(
-                        Map.of(
-                                "parts", List.of(
-                                        Map.of("text", prompt),
-                                        Map.of(
-                                                "inlineData", Map.of(
-                                                        "mimeType", mimeType,
-                                                        "data", base64
-                                                )
+                                Regeln:
+                                - Falls ein Wert nicht erkennbar ist, setze ihn auf null.
+                                - Erfinde keine Daten.
+                                - destination ist der Hauptzielort der Reise.
+                                - name soll kurz und sinnvoll sein.
+                                """
+                ),
+                Map.of(
+                        "role", "user",
+                        "content", List.of(
+                                Map.of("type", "text", "text", "Extrahiere aus diesem Bild Reisedaten."),
+                                Map.of(
+                                        "type", "image_url",
+                                        "image_url", Map.of(
+                                                "url", "data:" + mimeType + ";base64," + base64
                                         )
                                 )
                         )
-                ),
-                "generationConfig", Map.of(
-                        "temperature", 0,
-                        "responseMimeType", "application/json"
                 )
         );
 
-        return sendGeminiRequest(body);
+        return sendOpenRouterRequest(messages);
     }
 
-    private TripCreateDto sendGeminiRequest(Map<String, Object> body) throws Exception {
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/"
-                + geminiModel
-                + ":generateContent";
+    private Map<String, Object> buildOpenRouterBody(String model, List<Map<String, Object>> messages) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("model", model);
+        body.put("messages", messages);
+        body.put("temperature", 0);
+        body.put("max_tokens", 512);
+        body.put("response_format", Map.of(
+                "type", "json_schema",
+                "json_schema", Map.of(
+                        "name", "trip_extract",
+                        "strict", true,
+                        "schema", Map.of(
+                                "type", "object",
+                                "properties", Map.of(
+                                        "name", Map.of("type", List.of("string", "null")),
+                                        "destination", Map.of("type", List.of("string", "null")),
+                                        "startDate", Map.of("type", List.of("string", "null")),
+                                        "endDate", Map.of("type", List.of("string", "null"))
+                                ),
+                                "required", List.of("name", "destination", "startDate", "endDate"),
+                                "additionalProperties", false
+                        )
+                )
+        ));
+        body.put("plugins", List.of(Map.of("id", "response-healing")));
+        return body;
+    }
+
+    private TripCreateDto sendOpenRouterRequest(List<Map<String, Object>> messages) throws Exception {
+        if (openRouterApiKey == null || openRouterApiKey.isBlank()) {
+            throw new RuntimeException("OpenRouter API-Key fehlt.");
+        }
+
+        String url = "https://openrouter.ai/api/v1/chat/completions";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-goog-api-key", geminiApiKey);
-
-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        headers.setBearerAuth(openRouterApiKey);
+        headers.set("HTTP-Referer", "http://localhost");
+        headers.set("X-Title", "sep-ba");
 
         try {
-            log.info("Gemini-Request wird gesendet, model={}", geminiModel);
+            List<String> models = parseOpenRouterModels();
+            log.info("OpenRouter-Request wird gesendet, models={}", models);
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    requestEntity,
-                    String.class
-            );
+            RuntimeException lastFailure = null;
+            for (String model : models) {
+                try {
+                    ResponseEntity<String> responseEntity = restTemplate.exchange(
+                            url,
+                            HttpMethod.POST,
+                            new HttpEntity<>(buildOpenRouterBody(model, messages), headers),
+                            String.class
+                    );
 
-            String response = responseEntity.getBody();
+                    String response = responseEntity.getBody();
+                    if (response == null || response.isBlank()) {
+                        throw new RuntimeException("Leere Antwort von OpenRouter erhalten.");
+                    }
 
-            if (response == null || response.isBlank()) {
-                throw new RuntimeException("Leere Antwort von Gemini erhalten.");
+                    log.info("OpenRouter-Antwort erhalten, model={}, status={}", model, responseEntity.getStatusCode());
+
+                    JsonNode json = mapper.readTree(response);
+                    JsonNode textNode = json.at("/choices/0/message/content");
+
+                    if (textNode.isMissingNode() || textNode.isNull() || textNode.asText().isBlank()) {
+                        throw new RuntimeException("Kein Antwortinhalt von OpenRouter erhalten: " + response);
+                    }
+
+                    String content = textNode.asText().trim();
+                    log.info("Rohinhalt von OpenRouter (model={}): {}", model, content);
+
+                    content = sanitizeJson(content);
+
+                    TripCreateDto dto = mapper.readValue(content, TripCreateDto.class);
+
+                    if (isCompletelyEmpty(dto)) {
+                        throw new RuntimeException("Es konnten keine Reisedaten erkannt werden.");
+                    }
+
+                    log.info("Extraktion erfolgreich mit model={}: name='{}', destination='{}', startDate={}, endDate={}",
+                            model, dto.getName(), dto.getDestination(), dto.getStartDate(), dto.getEndDate());
+
+                    return dto;
+                } catch (HttpStatusCodeException e) {
+                    String responseBody = e.getResponseBodyAsString();
+                    int status = e.getStatusCode().value();
+
+                    log.error("OpenRouter HTTP-Fehler mit model={}: status={}, body={}", model, e.getStatusCode(), responseBody);
+
+                    if (status == 429 || status == 408 || status == 503 || status == 502) {
+                        lastFailure = new RuntimeException("OpenRouter-Model " + model + " temporär nicht verfügbar: " + responseBody, e);
+                        continue;
+                    }
+                    if (status == 400) {
+                        throw new RuntimeException("Ungültige Anfrage an OpenRouter: " + responseBody);
+                    }
+                    if (status == 401 || status == 403) {
+                        throw new RuntimeException("OpenRouter API-Key ungültig oder nicht berechtigt.");
+                    }
+
+                    throw new RuntimeException("OpenRouter-Fehler: HTTP " + e.getStatusCode() + " - " + responseBody, e);
+                } catch (Exception e) {
+                    lastFailure = new RuntimeException("Fehler bei OpenRouter-Modell " + model + ": " + e.getMessage(), e);
+                    log.warn("Modell {} fehlgeschlagen, nächstes Modell wird versucht: {}", model, e.getMessage());
+                }
             }
 
-            log.info("Gemini-Antwort erhalten, status={}", responseEntity.getStatusCode());
-
-            JsonNode json = mapper.readTree(response);
-            JsonNode textNode = json.at("/candidates/0/content/parts/0/text");
-
-            if (textNode.isMissingNode() || textNode.isNull() || textNode.asText().isBlank()) {
-                throw new RuntimeException("Kein Antwortinhalt von Gemini erhalten: " + response);
+            if (lastFailure != null) {
+                throw lastFailure;
             }
-
-            String content = textNode.asText().trim();
-            log.info("Rohinhalt von Gemini: {}", content);
-
-            content = sanitizeJson(content);
-
-            TripCreateDto dto = mapper.readValue(content, TripCreateDto.class);
-
-            if (isCompletelyEmpty(dto)) {
-                throw new RuntimeException("Es konnten keine Reisedaten erkannt werden.");
-            }
-
-            log.info("Extraktion erfolgreich: name='{}', destination='{}', startDate={}, endDate={}",
-                    dto.getName(), dto.getDestination(), dto.getStartDate(), dto.getEndDate());
-
-            return dto;
-
-        } catch (HttpStatusCodeException e) {
-            String responseBody = e.getResponseBodyAsString();
-            log.error("Gemini HTTP-Fehler: status={}, body={}", e.getStatusCode(), responseBody);
-
-            int status = e.getStatusCode().value();
-
-            if (status == 400) {
-                throw new RuntimeException("Ungültige Anfrage an Gemini: " + responseBody);
-            }
-            if (status == 401 || status == 403) {
-                throw new RuntimeException("Gemini API-Key ungültig oder nicht berechtigt.");
-            }
-            if (status == 429) {
-                throw new RuntimeException("Die KI-Extraktion ist gerade ausgelastet. Bitte in ein paar Sekunden erneut versuchen.");
-            }
-
-            throw new RuntimeException("Gemini-Fehler: HTTP " + e.getStatusCode() + " - " + responseBody, e);
+            throw new RuntimeException("Kein OpenRouter-Modell konnte die Extraktion durchführen.");
         } catch (Exception e) {
-            log.error("Fehler beim Gemini-Request", e);
+            log.error("Fehler beim OpenRouter-Request", e);
             throw e;
         }
+    }
+
+    private List<String> parseOpenRouterModels() {
+        List<String> models = new ArrayList<>();
+        for (String rawModel : openRouterModels.split(",")) {
+            String model = rawModel.trim();
+            if (!model.isBlank()) {
+                models.add(model);
+            }
+        }
+        if (models.isEmpty()) {
+            models.add("google/gemma-4-31b-it:free");
+        }
+        return models;
     }
 
     private void validateExtractedText(String text) {

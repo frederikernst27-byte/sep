@@ -1,4 +1,4 @@
-package com.sep.sep_backend.CalenderEntry;
+package com.sep.sep_backend.CalendarEntry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,55 +8,55 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/calendar")
-public class CalenderEntryController {
-    private final CalenderEntryService service;
+public class CalendarEntryController {
+    private final CalendarEntryService service;
 
     @Autowired
-    public CalenderEntryController(CalenderEntryService service) {
+    public CalendarEntryController(CalendarEntryService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<CalenderEntryResponse> getEntries() {
+    public List<CalendarEntryResponse> getEntries() {
         return service.getEntries();
     }
 
     @GetMapping("/{id}")
-    public CalenderEntryResponse getEntryById(@PathVariable Long id) {
+    public CalendarEntryResponse getEntryById(@PathVariable Long id) {
         return service.getEntryById(id);
     }
 
     @GetMapping("/trip/{tripId}")
-    public List<CalenderEntryResponse> getEntriesByTripId(@PathVariable Long tripId) {
+    public List<CalendarEntryResponse> getEntriesByTripId(@PathVariable Long tripId) {
         return service.getEntriesByTripId(tripId);
     }
 
     @PutMapping("/{id}")
-    public CalenderEntryResponse updateEntry(@PathVariable Long id,
-                                             @RequestBody CalenderEntryRequest request) {
+    public CalendarEntryResponse updateEntry(@PathVariable Long id,
+                                             @RequestBody CalendarEntryRequest request) {
         return service.updateEntry(id,request);
     }
 
     @PostMapping
-    public CalenderEntryResponse createEntry(@RequestBody CalenderEntryRequest request) {
+    public CalendarEntryResponse createEntry(@RequestBody CalendarEntryRequest request) {
         return service.createEntry(request);
     }
 
     @PostMapping("/auto-create")
     @ResponseStatus(HttpStatus.CREATED)
-    public CalenderEntryResponse autoCreateEntry(@RequestBody TravelDataRequest request) {
+    public CalendarEntryResponse autoCreateEntry(@RequestBody TravelDataRequest request) {
         return service.createFromTravelData(request);
     }
 
     @PostMapping("/auto-create/batch")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<CalenderEntryResponse> autoCreateEntries(@RequestBody List<TravelDataRequest> requests) {
+    public List<CalendarEntryResponse> autoCreateEntries(@RequestBody List<TravelDataRequest> requests) {
         return service.createFromTravelData(requests);
     }
 
     @PatchMapping("/{id}")
-    public CalenderEntryResponse patchDateTime(@PathVariable Long id,
-                                               @RequestBody CalenderEntryRequest request) {
+    public CalendarEntryResponse patchDateTime(@PathVariable Long id,
+                                               @RequestBody CalendarEntryRequest request) {
         return service.patchDateTime(id, request);
     }
 

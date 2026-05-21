@@ -1,4 +1,4 @@
-package com.sep.sep_backend.CalenderEntry;
+package com.sep.sep_backend.CalendarEntry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,42 +6,42 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CalenderEntryService {
-    private final CalenderEntryRepository repository;
+public class CalendarEntryService {
+    private final CalendarEntryRepository repository;
 
     @Autowired
-    public CalenderEntryService(CalenderEntryRepository repository) {
+    public CalendarEntryService(CalendarEntryRepository repository) {
         this.repository = repository;
     }
 
-    public List<CalenderEntryResponse> getEntries() {
+    public List<CalendarEntryResponse> getEntries() {
         return repository.findAll().stream()
                 .map(this::toDto)
                 .toList();
     }
 
-    public List<CalenderEntryResponse> getEntriesByTripId(Long tripId) {
+    public List<CalendarEntryResponse> getEntriesByTripId(Long tripId) {
         return repository.findByTripId(tripId).stream()
                 .map(this::toDto)
                 .toList();
     }
 
-    public CalenderEntryResponse getEntryById(Long id) {
-        CalenderEntry entry = repository.findById(id).orElseThrow(()
+    public CalendarEntryResponse getEntryById(Long id) {
+        CalendarEntry entry = repository.findById(id).orElseThrow(()
                 -> new RuntimeException("Kalendereintrag nicht gefunden"));
         return toDto(entry);
     }
 
-    public CalenderEntryResponse patchDateTime(Long id, CalenderEntryRequest request) {
-        CalenderEntry entry = repository.findById(id).orElseThrow(()
+    public CalendarEntryResponse patchDateTime(Long id, CalendarEntryRequest request) {
+        CalendarEntry entry = repository.findById(id).orElseThrow(()
                 -> new RuntimeException("Kalendereintrag nicht gefunden"));
         entry.setDateTime(request.getDateTime());
-        CalenderEntry saved = repository.save(entry);
+        CalendarEntry saved = repository.save(entry);
         return toDto(saved);
     }
 
-    public CalenderEntryResponse updateEntry(Long id, CalenderEntryRequest request) {
-        CalenderEntry entry = repository.findById(id).orElseThrow();
+    public CalendarEntryResponse updateEntry(Long id, CalendarEntryRequest request) {
+        CalendarEntry entry = repository.findById(id).orElseThrow();
 
         entry.setName(request.getName());
         entry.setDescription(request.getDescription());
@@ -58,8 +58,8 @@ public class CalenderEntryService {
         return toDto(entry);
     }
 
-    public CalenderEntryResponse createEntry(CalenderEntryRequest request) {
-        CalenderEntry entry = new CalenderEntry();
+    public CalendarEntryResponse createEntry(CalendarEntryRequest request) {
+        CalendarEntry entry = new CalendarEntry();
 
         entry.setName(request.getName());
         entry.setDescription(request.getDescription());
@@ -71,13 +71,13 @@ public class CalenderEntryService {
         entry.setUserId(request.getUserId());
         entry.setTripId(request.getTripId());
 
-        CalenderEntry saved = repository.save(entry);
+        CalendarEntry saved = repository.save(entry);
 
         return toDto(saved);
     }
 
-    public CalenderEntryResponse createFromTravelData(TravelDataRequest request) {
-        CalenderEntry entry = new CalenderEntry();
+    public CalendarEntryResponse createFromTravelData(TravelDataRequest request) {
+        CalendarEntry entry = new CalendarEntry();
 
         entry.setName(resolveTitle(request));
         entry.setDescription(request.getDescription());
@@ -89,12 +89,12 @@ public class CalenderEntryService {
         entry.setUserId(request.getUserId());
         entry.setTripId(request.getTripId());
 
-        CalenderEntry saved = repository.save(entry);
+        CalendarEntry saved = repository.save(entry);
 
         return toDto(saved);
     }
 
-    public List<CalenderEntryResponse> createFromTravelData(List<TravelDataRequest> requests) {
+    public List<CalendarEntryResponse> createFromTravelData(List<TravelDataRequest> requests) {
         return requests.stream()
                 .map(this::createFromTravelData)
                 .toList();
@@ -108,8 +108,8 @@ public class CalenderEntryService {
         }
     }
 
-    private CalenderEntryResponse toDto(CalenderEntry entry) {
-        CalenderEntryResponse response = new CalenderEntryResponse();
+    private CalendarEntryResponse toDto(CalendarEntry entry) {
+        CalendarEntryResponse response = new CalendarEntryResponse();
 
         response.setId(entry.getId());
         response.setDescription(entry.getDescription());
