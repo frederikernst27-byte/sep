@@ -169,7 +169,7 @@ public class DocumentExtractService {
         body.put("model", model);
         body.put("messages", messages);
         body.put("temperature", 0);
-        body.put("max_tokens", 512);
+        body.put("max_tokens", 1024);
         body.put("response_format", Map.of(
                 "type", "json_schema",
                 "json_schema", Map.of(
